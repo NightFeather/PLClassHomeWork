@@ -4,10 +4,10 @@ typedef struct {
   int hour;
   int min;
   int sec;
-} TIME;
+} time;
 
-TIME timeMinus(TIME origin,TIME offset) {
-  TIME result = {0,0,0};
+time timeminus(time origin,time offset) {
+  time result = {0,0,0};
   if(origin.sec < offset.sec) {
     origin.min --;
     origin.sec += 60;
@@ -24,7 +24,7 @@ TIME timeMinus(TIME origin,TIME offset) {
 
 int main() {
 
-  TIME midnight = {23,59,59}, parsing, result;
+  time midnight = {23,59,59}, parsing, result;
   int limit[3] = {24,60,60}, offset = sizeof(int), i = 0, input;
   char tags[3][5] = {"Hour","Min","Sec"};
   printf("Type in the time of now\n");
@@ -35,7 +35,7 @@ int main() {
     }while(input <0 || input >= limit[i]);
     *((int *)(((char*)&parsing)+offset*i)) = input;
   }
-  result = timeMinus(midnight, parsing);
+  result = timeminus(midnight, parsing);
   printf("Remaining: %02d:%02d:%02d\n",result.hour,result.min,result.sec);
   return 0;
 }
