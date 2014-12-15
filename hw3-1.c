@@ -9,21 +9,12 @@ typedef struct {
 time timeminus(time origin,time offset) {
 
   time result = {0,0,0};
-
-  if(origin.sec < offset.sec) {
-    origin.min --;
-    origin.sec += 60;
-  }
-  result.sec = origin.sec - offset.sec;
-
-  if(origin.min < offset.min || origin.min < 0) {
-    origin.hour --;
-    origin.min += 60;
-  }
-  result.min = origin.min - offset.min;
-
-  result.hour = origin.hour - offset.hour;
-
+  int buffer = 0;
+  buffer = origin.hour * 60 * 60 + origin.min * 60 + origin.sec;
+  buffer -= offset.hour * 60 * 60 + offset.min * 60 + offset.sec;
+  result.hour = buffer / 3600;
+  result.min  = buffer / 60 % 60;
+  result.sec  = buffer % 60;
   return result;
 }
 
@@ -47,5 +38,9 @@ int main() {
 
   printf("Remaining: %02d:%02d:%02d\n",ship.hour,ship.min,ship.sec);
 
+#if defined(_WIN32) || defined(_WIN64)
+  system("pause");
+#endif
+  
   return 0;
 }
