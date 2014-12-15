@@ -9,7 +9,7 @@ typedef struct {
   int score;
 } student;
 
-void display(student);
+void display(student, char);
 void import(char*, student*,int*);
 void export(char*, student*,int);
 
@@ -35,7 +35,7 @@ int main(){
       case 'l':
         for(i = 0; i<counter; i++) {
           printf("No. %d\n",i+1);
-          display(studentList[i]);
+          display(studentList[i], '\n');
           printf("============\n");
         }
         break;
@@ -58,16 +58,22 @@ int main(){
         printf("輸入錯誤!\n");
     }
     fflush(stdin);
+
+#if defined(_WIN32) || defined(_WIN64)
+    system("pause");
+#else
     printf("Press Enter to Continue...\n");
     scanf("%*c");
     fflush(stdin);
+#endif
+
   }while(1);
 }
 
-void display(student input) {
-  printf("姓名: %s\n",input.name);
-  printf("學號: %s\n",input.id);
-  printf("分數: %d\n",input.score);
+void display(student input, char append) {
+  printf("姓名: %s %c",input.name,append);
+  printf("學號: %s %c",input.id,append);
+  printf("分數: %d %c",input.score,append);
 }
 
 
@@ -76,9 +82,11 @@ void import(char* fname, student* list,int* pos) {
   student buffer;
   fp = fopen(fname, "r");
   if(fp == NULL) { printf("Error Open File: \"%s\"\n",fname); return;}
+  *pos = 0;
   while(fscanf(fp,"%s %s %d",buffer.name,buffer.id,&buffer.score) != EOF) {
     list[*pos] = buffer;
     (*pos)++;
+    display(buffer,' '); putchar('\n');
   }
   fclose(fp);
   return;
